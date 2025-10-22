@@ -9,16 +9,19 @@ set_option tactic.hygienic false
 -- e.g., 'a', 'aba', 'aabbcbbaa'
 
 inductive IsPalindrome {α : Type} : List α → Prop
---  | nil :  ??
---  | single (a : α) :  ??
---  | cons_eq (a : α) (l : List α) :  ??
+ | nil :  IsPalindrome []
+ | single (a : α) : IsPalindrome [a]
+ | cons_eq (a : α) (l : List α) :  IsPalindrome l → IsPalindrome ((a::l) ++ [a])
 
 theorem IsPalindrome_imp_eq_reverse {α : Type} (l : List α) :
-  IsPalindrome l → l = List.reverse l := by sorry
+  IsPalindrome l → l = List.reverse l := by
+    intro h
+    induction h <;> try simp
+    trivial
 
 theorem IsPalindrome_pmi_eq_reverse {α : Type} (l : List α) :
-  l = List.reverse l → IsPalindrome l  := by sorry
-
+  l = List.reverse l → IsPalindrome l  := by
+    sorry
 theorem IsPalindrome_reverse {α : Type} (l : List α) (h: IsPalindrome l) :
    IsPalindrome l.reverse  := by sorry
 

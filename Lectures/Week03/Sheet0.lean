@@ -72,7 +72,8 @@ theorem power_two_ih_alt (n : ℕ) (ih : 5 ≤ n) (h : 2 ^ n > n ^ 2) : 2 ^ (n +
 
 -- Exercise 1
 -- try without omega
-theorem power_two_linear (n : ℕ) (ih : 3 ≤ n) (h : 2*n < 2^n) : 2*(n+1) < 2^(n+1) := by sorry
+theorem power_two_linear (n : ℕ) (ih : 3 ≤ n) (h : 2*n < 2^n) : 2*(n+1) < 2^(n+1) := by
+  sorry
 
 -- Exericse 2
 -- prove this without omega

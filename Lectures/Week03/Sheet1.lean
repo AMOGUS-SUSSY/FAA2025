@@ -36,7 +36,10 @@ def I2 : ℕ → ℕ
   | n + 1 => I2 n + 2
 
 #eval [I2 0, I2 1, I2 2]
-example (n:ℕ): I2 n = 2*n := by sorry
+example (n:ℕ): I2 n = 2*n := by
+  induction' n with n ih
+  · trivial
+  · rw [I2, ih, Nat.mul_add]
 
 -- Another example
 example (n:ℕ): Even (I2 n) := by
@@ -66,8 +69,13 @@ def S : ℕ → ℕ
 #check mul_comm
 
 -- Exercise 3
-lemma Sn_two (n : ℕ) : 2*(S n) = n * (n + 1)  := by sorry
-
+lemma Sn_two (n : ℕ) : 2*(S n) = n * (n + 1)  := by
+  induction' n with n' IH
+  · trivial
+  · rw [Nat.right_distrib]
+    rw [Nat.mul_add_one n' (n' + 1), ← IH]
+    rw [Nat.one_mul]
+    sorry
 example (n : ℕ) : (S n) = n * (n + 1)/2  := by sorry
 
 -- It is much easier to work with type ℚ
@@ -109,7 +117,13 @@ example : ∀ n ≥ 5, 2 ^ n > n ^ 2 := by
     exact power_two_ih n ih h
 
 -- Exercise 4
-lemma le_fact (n : ℕ) : 1 ≤ (n)! := by sorry
+lemma le_fact (n : ℕ) : 1 ≤ (n)! := by
+  induction' n with n' IH
+  · trivial
+  · rw [factorial]
+    rw [Nat.add_one_mul n' n' !]
+    grw [IH]
+    rw [Nat.Simproc.le_add_le n' ! Nat.le.refl];trivial
 
 -- Exercise 5
 example (n : ℕ) : 2^n ≤ (n+1)! := by sorry

@@ -37,8 +37,10 @@ example : ∀ n : ℕ, n + 0 = n := by
            -- Use obtain ⟨a, ⟨b, c⟩⟩ := h for nested existentials
 -/
 
-example : ∃ n : ℕ, n + 3 = 7 := by sorry
-example : ∃ n m : ℕ, n + m = 5 := by sorry
+example : ∃ n : ℕ, n + 3 = 7 := by
+  use 4
+example : ∃ n m : ℕ, n + m = 5 := by
+  use 2, 3
 
 -- Definition of an even number.
 def IsEven (n : ℤ) : Prop := ∃ k, n = 2 * k
@@ -46,9 +48,11 @@ def IsEven (n : ℤ) : Prop := ∃ k, n = 2 * k
 -- If there exists an even number `n` that is greater than 10,
 -- then there must exist some integer `m` that is greater than 5.
 example (h : ∃ n : ℤ, IsEven n ∧ n > 10) : ∃ m : ℤ, m > 5 := by
+  obtain ⟨x, ⟨h1, h⟩⟩ := h
+  use x
+  omega
   -- Use `obtain` to get the number `n` and its properties from `h`.
   -- The syntax is: obtain ⟨n, hn_prop⟩ := h
-  sorry
 
 
 def IsOdd (n : ℤ) : Prop := ∃ k, n = 2 * k + 1
@@ -63,4 +67,10 @@ example (n:ℤ) (h : IsEven n) :  IsOdd (n+1) := by
 
 -- Exercise 0. Prove that the sum of two even numbers is even.
 example (a b:ℤ) (h_a : IsEven a) (h_b : IsEven b) : IsEven (a + b) := by
-  sorry
+  rewrite[IsEven]
+  rewrite[IsEven] at h_a h_b
+  obtain⟨k1,a⟩ := h_a
+  obtain⟨k2,b⟩ := h_b
+  use(k1+k2)
+  rw[a,b]
+  omega

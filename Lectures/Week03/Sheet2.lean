@@ -50,7 +50,13 @@ example (x: ℕ): fib x ≤ 2^x := by
   induction x using Nat.twoStepInduction
   · simp [fib]
   · simp [fib]
-  · sorry
+  · rename_i n IH1 IH2
+    rw [fib] at *
+    grw[IH1,IH2]
+    rw [show 2 ^ (n + 1) + 2 ^ n = 3 * 2^n by omega]
+    rw [show 2 ^ (n + 2) = 2^(n+1) * 2 by rfl]
+    rw [show 2 ^ (n + 1) = 2^n * 2 by rfl]
+    omega
 
 -- Define the following recurrence relation
 -- f (n) ≤ n + 2* f(n/2)

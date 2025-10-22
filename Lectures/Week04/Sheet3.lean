@@ -73,14 +73,32 @@ theorem len_append_fun_induction_oneline (x : ℕ) (l : List ℕ) : len (l ++ [x
 -- # Exercise 3.1: write filter where it takes out items that are not in the list
 def my_filter {α : Type} (p : α → Bool) : List α → List α
 | [] => []
-| a :: as => sorry
+| a :: as => if p a then as else a :: as
 
-example: my_filter (fun x => x % 2 == 0) [1, 2, 3, 4, 5, 6] = [2,4,6] := sorry
-example: my_filter (fun s => s.startsWith "a") ["apple", "banana", "almond", "kiwi"] =  ["apple", "almond"] := sorry
+example: my_filter (fun x => x % 2 == 0) [1, 2, 3, 4, 5, 6] = [2,4,6] :=
+  by unfold
+example: my_filter (fun s => s.startsWith "a") ["apple", "banana", "almond", "kiwi"] =  ["apple", "almond"] := 
+  by unfold
 
 -- Prove this:
 theorem filter_append {α : Type} (p : α → Bool) (l1 l2 : List α) :
-  my_filter p (l1 ++ l2) = (my_filter p l1) ++ (my_filter p l2) := by sorry
+  my_filter p (l1 ++ l2) = (my_filter p l1) ++ (my_filter p l2) := by
+  fun_induction len l1
+  · simp!
+  · simp!
+    split <;> (rename_i cs)
+    · simp
+      cases l2
+      · trivial
+      · simp! only [
+        my_filter, 
+        right_eq_ite_iff, 
+        List.cons_ne_self, 
+        imp_false, 
+        Bool.not_eq_true]
+        by_cases cs' : p head_1 = false
+        · trivial
+        · simp_all; rw[cs'] at ih1
 
 
 -- # Exercise 3.2: write foldl

@@ -60,12 +60,12 @@ example : S1 ⊆ S2 := by simp only [S1, S2, singleton_subset_iff, mem_insert_if
 example: (10 ∈ S1) = (S1 10) := by rfl
 
 --  (3) How to define an emptyset?
-def my_emptyset : Set ℕ := sorry
-example: my_emptyset = ∅  := by sorry -- rfl should be enough
+def my_emptyset : Set ℕ := fun _ ↦ False
+example: my_emptyset = ∅  := by rfl -- rfl should be enough
 
 --  (4) How to define a universe set?
 def my_univ : Set ℕ := fun _ ↦ True
-example: my_univ = univ := by sorry
+example: my_univ = univ := by rfl
 
 
 variable {α : Type*}
@@ -97,5 +97,12 @@ example : A ⊆ B → B ⊆ C → A ⊆ C := sorry
 
 -- Exercise 2:  More exercises
 #check Set.inter_def
-example : A ∩ B ⊆ B := by sorry
-example : A ⊆ B → A ⊆ C → A ⊆ B ∩ C := by sorry
+example : A ∩ B ⊆ B := by
+  rw [@subset_def]
+  intro x hx
+  obtain ⟨ hl,hr ⟩ := hx
+  exact hr
+example : A ⊆ B → A ⊆ C → A ⊆ B ∩ C := by
+  intro h0 h1
+  rw [@subset_inter_iff]
+  exact ⟨h0, h1⟩

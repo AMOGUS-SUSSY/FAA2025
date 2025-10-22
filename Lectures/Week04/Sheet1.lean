@@ -113,32 +113,17 @@ Define T(m,n):
   Prove that T(m,n) ≤ 2^{m+n}
 -/
 
--- by Basil Rohner - Wednesday, 8 October 2025, 2:36 PM
 def T : ℕ → ℕ → ℕ
-| 0, _ => 1
-| _, 0 => 1
-| m+1, n+1 => T m (n+1) + T (m+1) n
+  | _, 0 => 1
+  | 0, _ => 1
+  | m+1, n+1 => (T (m) n) + (T m (n))
 
+theorem solve_T (m n: ℕ):  T m n ≤ 2^(m+n)  := by
+  fun_induction T m n <;> (expose_names)
+  · simp; exact Nat.one_le_two_pow
+  · simp; exact Nat.one_le_two_pow
+  · simp_all; grw [ih1]; ring_nf; simp
 
-def T' : ℕ → ℕ → ℕ
-| 0, _ => 1
-| _, 0 => 1
-| m+1, n+1 => T m (n+1) + T (m+1) n
-
-#check T
-#check T'
-
-#check T
-#check T 10
-#check T 10 10
-
-theorem solve_T (m n: ℕ): T m n ≤ 2^(m+n) := by
-fun_induction T <;> expose_names <;> try simp only [zero_add, add_zero, ←Nat.add_one]
-· exact Nat.one_le_pow' x 1
-· exact Nat.one_le_pow' x 1
-· grw [ih1, ih2]
-  ring_nf
-  rfl
 
 -- # Exercise 1.2
 /- (TODO: Fix later)
