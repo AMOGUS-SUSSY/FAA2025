@@ -53,17 +53,27 @@ theorem mem_either_merge_auto (xs ys : List ℕ) (z : ℕ)
 -- Let's break down the proof and see how to prove this by ``hand``.
 -- Exercise 2.1: try to prove this using either recursion or functional induction (don't use grind on the inductive step)
 theorem mem_either_merge (xs ys : List ℕ) (z : ℕ)
-  (hz : z ∈ Merge xs ys) : z ∈ xs ∨ z ∈ ys := by sorry
+  (hz : z ∈ Merge xs ys) : z ∈ xs ∨ z ∈ ys := by
+  fun_induction Merge <;> (simp_all; try tauto)
 
 -- Exercise 2.2: use mem_either_merge to prove the following.
 #check mem_either_merge
 theorem min_all_merge (x : ℕ) (xs ys: List ℕ)
- (hxs : x.MinOfList xs) (hys : x.MinOfList ys) : x.MinOfList (Merge xs ys):= by sorry
+ (hxs : x.MinOfList xs) (hys : x.MinOfList ys) : x.MinOfList (Merge xs ys):= by
+  fun_induction Merge
+  · trivial
+  · trivial
+  · simp_all!
+  · apply ih1 at hxs
+    aesop
 
 -- We are ready to prove the main sorted merge.
 -- discuss a proof
 
-theorem sorted_merge(l1 l2 : List ℕ)(hxs: Sorted l1) (hys: Sorted l2): Sorted (Merge l1 l2) := by sorry
+theorem sorted_merge(l1 l2 : List ℕ)(hxs: Sorted l1) (hys: Sorted l2): Sorted (Merge l1 l2) := by
+  fun_induction Merge l1 l2 <;> try trivial
+  · sorry
+  · sorry
 
 -- c.f. with recursive proofs.
 theorem sorted_merge_rec(l1 l2 : List ℕ)(hxs: Sorted l1) (hys: Sorted l2): Sorted (Merge l1 l2) := by
@@ -91,10 +101,3 @@ theorem sorted_merge_rec(l1 l2 : List ℕ)(hxs: Sorted l1) (hys: Sorted l2): Sor
       · apply sorted_merge
         · exact hxs
         · exact sorted_suffix hys
-
--- Exercise 2.3
-theorem merge_min_out (x : ℕ) (xs ys : List ℕ) (h_min_in_xs : ∀ y ∈ xs, x ≤ y)
-  : Merge (x :: ys) xs = x :: Merge ys xs := by sorry
-
--- Exercise 2.4
-theorem merge_min_out_sym(x : ℕ) (xs ys : List ℕ) (h_min_in_xs : ∀ y ∈ xs, x ≤ y) (h_min_in_ys : ∀ y ∈ ys, x ≤ y) : Merge ys (x ::xs)  = x :: Merge ys xs := by sorry
