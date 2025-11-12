@@ -7,9 +7,9 @@ set_option tactic.hygienic false
 -- Q: How do we select an element from ∃ x , P x statement?
 
 def has_sqrt (n : ℕ) : Prop := ∃ m : ℕ, m * m = n
-def sqrt_if_perfect (n : ℕ) (h : has_sqrt n) : 1=1 := by
---  obtain
-  sorry --? How to extract the witness
+
+noncomputable
+def sqrt_if_perfect (n : ℕ) (h : has_sqrt n) := h.choose
 
 -- In Lean, you can use `Classical.choose`.
 #check Classical.choose
@@ -59,7 +59,7 @@ def sqrt_if_perfect2 (n : ℕ) (h : has_sqrt n) : some_prop := by
   sorry
 
 -- The key architectural decision in Lean: Prop is proof-irrelevant and computationally erased.
--- The `obtain` tactic only work in the Prop (i.e., proof mode).
+-- The `obtain` tactic only works in the Prop (i.e., proof mode).
 -- whereas `Classical.choose` lifts from Prop to Type.
 
 #check Classical.choose
@@ -134,13 +134,18 @@ lemma BitonicSortedArrayFun.peak_idx_lt_size {n : ℕ} (arr : BitonicSortedArray
 
 -- Exercise 2: Prove monotonicity up to peak
 lemma BitonicSortedArrayFun.mono_before_peak {n : ℕ} (arr : BitonicSortedArrayFun n) :
-    StrictMonoOn arr.get (Set.Icc 0 arr.peak_idx) := by sorry
+    StrictMonoOn arr.get (Set.Icc 0 arr.peak_idx) := by
+    have := (arr.bitonic).choose_spec
+    obtain ⟨h0,⟨ h1,h2 ⟩ ⟩ := this
+    trivial
 
 -- Exercise 3: Prove that any element before peak is less than peak value
 -- Hint: Combine choose_spec with StrictMonoOn properties
 lemma BitonicSortedArrayFun.before_peak_lt_peak {n : ℕ} (arr : BitonicSortedArrayFun n)
     (i : ℕ) (hi : i < arr.peak_idx) :
-    arr.get i < arr.get arr.peak_idx := by sorry
+    arr.get i < arr.get arr.peak_idx := by
+    sorry
+
 
 -- Exercise 4: Prove that any element after peak is less than peak value
 lemma BitonicSortedArrayFun.after_peak_lt_peak {n : ℕ} (arr : BitonicSortedArrayFun n)

@@ -129,7 +129,11 @@ Part A: Implement using do notation
 -/
 
 def computeExpr (a b c d e f : ℕ) : Option ℕ := do
-  sorry  -- Your code here
+  let x ← safeDivide a b
+  let y ← safeDivide c d
+  let z ← safeDivide e f
+  let res ← x*y + z
+  pure res
 
 /-
 Part B: Implement the SAME function WITHOUT do notation
